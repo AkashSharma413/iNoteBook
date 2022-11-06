@@ -5,7 +5,7 @@ import AddNote from "./AddNote";
 
 const Notes = () => {
   const context = useContext(noteContext);
-  const { notes, addNote } = context;
+  const { notes } = context;
 
   return (
     <>
@@ -15,7 +15,7 @@ const Notes = () => {
       </div>
       <div className="row">
         {notes.map((note) => {
-          return <Noteitem note={note} />;
+          return <Noteitem note={note} key={note._id}/>;
         })}
       </div>
     </>
