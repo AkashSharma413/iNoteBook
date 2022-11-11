@@ -2,112 +2,92 @@ import React, { useState } from "react";
 import noteContext from "./noteContext";
 
 const NoteState = (props) => {
-
-  const notesInitial = [
-    {
-      "_id": "634063634a3febdf1781d6c5",
-      "user": "633f1e00c358cefdfe6e72cc",
-      "title": "Be Master of React Js",
-      "description": "React js is a powerfull library of javascript to build the user interface and single page application and many more...",
-      "tag": "General",
-      "date": "2022-10-07T17:35:31.163Z",
-      "__v": 0
-    },
-    {
-      "_id": "634ebfeaa190ce95e759107e",
-      "user": "633f1e00c358cefdfe6e72cc",
-      "title": "Javascript",
-      "description": "Javascript is the powerful language of the internet now a days.",
-      "tag": "Programing",
-      "date": "2022-10-18T15:02:02.011Z",
-      "__v": 0
-    },
-    {
-      "_id": "634063634a3febdf1781d6c5ew",
-      "user": "633f1e00c358cefdfe6e72cc",
-      "title": "Be Master of React Js",
-      "description": "React js is a powerfull library of javascript to build the user interface and single page application and many more...",
-      "tag": "General",
-      "date": "2022-10-07T17:35:31.163Z",
-      "__v": 0
-    },
-    {
-      "_id": "634ebfeaa190ce95e759107edf",
-      "user": "633f1e00c358cefdfe6e72cc",
-      "title": "Javascript",
-      "description": "Javascript is the powerful language of the internet now a days.",
-      "tag": "Programing",
-      "date": "2022-10-18T15:02:02.011Z",
-      "__v": 0
-    },
-    {
-      "_id": "634063634a3febdf1781d6c5vv",
-      "user": "633f1e00c358cefdfe6e72cc",
-      "title": "Be Master of React Js",
-      "description": "React js is a powerfull library of javascript to build the user interface and single page application and many more...",
-      "tag": "General",
-      "date": "2022-10-07T17:35:31.163Z",
-      "__v": 0
-    },
-    {
-      "_id": "634ebfeaa190ce95e759107ehh",
-      "user": "633f1e00c358cefdfe6e72cc",
-      "title": "Javascript",
-      "description": "Javascript is the powerful language of the internet now a days.",
-      "tag": "Programing",
-      "date": "2022-10-18T15:02:02.011Z",
-      "__v": 0
-    },
-    {
-      "_id": "634063634a3febdf1781d6c5bb",
-      "user": "633f1e00c358cefdfe6e72cc",
-      "title": "Be Master of React Js",
-      "description": "React js is a powerfull library of javascript to build the user interface and single page application and many more...",
-      "tag": "General",
-      "date": "2022-10-07T17:35:31.163Z",
-      "__v": 0
-    },
-    {
-      "_id": "634ebfeaa190ce95e759107enn",
-      "user": "633f1e00c358cefdfe6e72cc",
-      "title": "Javascript",
-      "description": "Javascript is the powerful language of the internet now a days.",
-      "tag": "Programing",
-      "date": "2022-10-18T15:02:02.011Z",
-      "__v": 0
-    }
-  ];
-
+  const host = "http://localhost:5000";
+  const notesInitial = [];
   const [notes, setNotes] = useState(notesInitial);
 
-  // Add a note
-  const addNote = (title, description, tag) => {
+  // GET ALL NOTES //
+  const getAllNotes = async () => {
+    // API Call
+    const response = await fetch(`${host}/api/notes/fetchallnotes`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token":
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjMzZjFlMDBjMzU4Y2VmZGZlNmU3MmNjIn0sImlhdCI6MTY2NTA4MDgzMn0.gkrpzL6vsOEFYtTvxTqKFzz4zfQJjCYgQqHvRgzkF70",
+      },
+    });
+    const data = await response.json();
+    console.log(data);
+    setNotes(data);
+  };
+
+
+  // ADD A NOTE //
+  const addNote = async (title, description, tag) => {
+    // API Call
+    const response = await fetch(`${host}/api/notes/addnote`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token":
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjMzZjFlMDBjMzU4Y2VmZGZlNmU3MmNjIn0sImlhdCI6MTY2NTA4MDgzMn0.gkrpzL6vsOEFYtTvxTqKFzz4zfQJjCYgQqHvRgzkF70",
+      },
+      body: JSON.stringify({ title, description, tag }),
+    });
+    const result = response.json();
+
     const note = {
-      "_id": "634ebfeaa190ce95e759107enn",
-      "user": "633f1e00c358cefdfe6e72cc",
-      "title": title,
-      "description": description,
-      "tag": tag,
-      "date": "2022-10-18T15:02:02.011Z",
-      "__v": 0
-    }
+      _id: "634ebfeaa190ce95e759107enn",
+      user: "633f1e00c358cefdfe6e72cc",
+      title: title,
+      description: description,
+      tag: tag,
+      date: "2022-10-18T15:02:02.011Z",
+      __v: 0,
+    };
     setNotes(notes.concat(note));
-  }
+  };
 
-  // Delete a note
+  // DELETE A NOTE //
   const deleteNote = (noteId) => {
-    const newNotes = notes.filter((note) => {return note._id !== noteId });
+    const newNotes = notes.filter((note) => {
+      return note._id !== noteId;
+    });
     setNotes(newNotes);
-  }
+  };
 
-  // Edit a note
-  const editNote = () => {
+  // EDIT A NOTE //
+  const editNote = async (id, title, description, tag) => {
+    // API Call
+    const response = await fetch(`${host}/api/notes/updatenote/${id}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token":
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjMzZjFlMDBjMzU4Y2VmZGZlNmU3MmNjIn0sImlhdCI6MTY2NTA4MDgzMn0.gkrpzL6vsOEFYtTvxTqKFzz4zfQJjCYgQqHvRgzkF70",
+      },
+      body: JSON.stringify({ title, description, tag }),
+    });
+    const result = response.json();
 
-  }
+    // logic to edit a note
+    for (let index = 0; index < notes.length; index++) {
+      const element = notes[index];
+      if (element._id == id) {
+        element.title = title;
+        element.description = description;
+        element.tag = tag;
+      }
+    }
+  };
 
-  
   return (
-    <noteContext.Provider value={{notes, setNotes, addNote, deleteNote, editNote}}>{props.children}</noteContext.Provider>
+    <noteContext.Provider
+      value={{ notes, setNotes, addNote, deleteNote, editNote, getAllNotes }}
+    >
+      {props.children}
+    </noteContext.Provider>
   );
 };
 
