@@ -6,7 +6,12 @@ import AddNote from "./AddNote";
 const Notes = () => {
   const context = useContext(noteContext);
   const { notes, getAllNotes, editNote } = context;
-  const [note, setNote] = useState({id:"", etitle: "", edescription: "", etag: "" });
+  const [note, setNote] = useState({
+    id: "",
+    etitle: "",
+    edescription: "",
+    etag: "",
+  });
 
   // Invoke the getAllNotes method to fetch all notes before render the component only once
   useEffect(() => {
@@ -84,6 +89,7 @@ const Notes = () => {
                     name="etitle"
                     value={note.etitle}
                     onChange={onChange}
+                    required
                   />
                 </div>
                 <div className="mb-3">
@@ -97,6 +103,7 @@ const Notes = () => {
                     name="edescription"
                     value={note.edescription}
                     onChange={onChange}
+                    required
                   />
                 </div>
                 <div className="mb-3">
@@ -110,6 +117,7 @@ const Notes = () => {
                     name="etag"
                     value={note.etag}
                     onChange={onChange}
+                    required
                   />
                 </div>
               </form>
@@ -124,6 +132,9 @@ const Notes = () => {
                 Close
               </button>
               <button
+                disabled={
+                  note.etitle.length < 5 || note.edescription.length < 5
+                }
                 onClick={handleSubmit}
                 type="button"
                 className="btn btn-primary"
@@ -136,7 +147,10 @@ const Notes = () => {
       </div>
 
       <div className="row">
-        <h3>Your Notes</h3>
+        <div className="col-12">
+          <h3>Your Notes</h3>
+          <p>{notes.length == 0 && "No notes to display"}</p>
+        </div>
       </div>
       <div className="row">
         {notes.map((note) => {

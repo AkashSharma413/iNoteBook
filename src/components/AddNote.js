@@ -4,11 +4,16 @@ import noteContext from "../context/notes/noteContext";
 const AddNote = () => {
   const context = useContext(noteContext);
   const { addNote } = context;
-  const [note, setNote] = useState({ title: "", description: "", tag: "default" });
+  const [note, setNote] = useState({
+    title: "",
+    description: "",
+    tag: "",
+  });
 
   const handleSubmit = (e) => {
     e.preventDefault();
     addNote(note.title, note.description, note.tag);
+    setNote({title: "", description: "", tag: "",});
   };
 
   const onChange = (e) => {
@@ -31,6 +36,8 @@ const AddNote = () => {
                 id="title"
                 name="title"
                 onChange={onChange}
+                required
+                value={note.title}
               />
             </div>
             <div className="mb-3">
@@ -43,6 +50,8 @@ const AddNote = () => {
                 id="description"
                 name="description"
                 onChange={onChange}
+                required
+                value={note.description}
               />
             </div>
             <div className="mb-3">
@@ -55,9 +64,12 @@ const AddNote = () => {
                 id="tag"
                 name="tag"
                 onChange={onChange}
+                required
+                value={note.tag}
               />
             </div>
             <button
+              disabled={note.title.length < 5 || note.description.length < 5}
               type="submit"
               className="btn btn-primary"
               onClick={handleSubmit}
