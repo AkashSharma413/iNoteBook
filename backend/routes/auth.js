@@ -19,10 +19,11 @@ router.post(
     }),
   ],
   async (req, res) => {
+    let success = false;
     // If there are errors, return bad request and errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      return res.status(400).json({success, errors: errors.array() });
     }
     
     // Check weather the user with this email exists already
@@ -31,7 +32,7 @@ router.post(
       if (user) {
         return res
           .status(400)
-          .json({ error: "Sorry a user with this email already exists." });
+          .json({success, error: "Sorry a user with this email already exists." });
       }
 
       // Hashing the password and added the salt to password
@@ -54,7 +55,8 @@ router.post(
       const authToken = jwt.sign(data, JWT_SECRET);
 
       // res.json({ Success: "User added successfuly!" });
-      res.json({ authToken });
+      success = true;
+      res.json({success, authToken });
     } catch (error) {
       console.log(error.message);
       res.status(400).send("Some error occurred!");
