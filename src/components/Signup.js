@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import {useNavigate } from "react-router-dom";
 
-const Signup = () => {
+const Signup = (props) => {
   const [credentials, setCredentials] = useState({name:"", email: "", password: "" });
   let navigate = useNavigate ();
   const {name, email, password} = credentials;
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    // Login API call
+    // Signup API call
     const response = await fetch(`http://localhost:5000/api/auth/createuser`, {
       method: "POST",
       headers: {
@@ -23,7 +23,10 @@ const Signup = () => {
       // Save the auth token and redirect
       localStorage.setItem("token", json.authToken);
       navigate("/");
-    } 
+      props.showAlert("Congratulations!, you are signed up successfully.", "success");
+    } else{
+      props.showAlert(json.error, "danger");
+    }
   };
 
   const onChange = (e) => {
