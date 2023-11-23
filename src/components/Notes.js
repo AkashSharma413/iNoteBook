@@ -28,12 +28,12 @@ const Notes = (props) => {
   }, []);
 
   // Referencing the current html element
-  const ref = useRef(null);
+  const refOpen = useRef(null);
   const refClose = useRef(null);
 
   // Updating current note values state
   const updateNote = (currentNote) => {
-    ref.current.click();
+    refOpen.current.click();
     setNote({
       id: currentNote._id,
       etitle: currentNote.title,
@@ -58,7 +58,7 @@ const Notes = (props) => {
     <>
       <AddNote showAlert={showAlert}/>
       <button
-        ref={ref}
+        ref={refOpen}
         type="button"
         className="btn btn-primary d-none"
         data-bs-toggle="modal"
